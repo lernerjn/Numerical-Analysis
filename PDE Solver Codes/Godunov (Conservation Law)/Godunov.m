@@ -37,7 +37,7 @@ b = 2;
 %end time
 t_end = 2;
 
-%dt/dx = 1/2, as given in the problem statement
+%dt/dx = 1/2
 dx = 2*dt;
 %dx = 1/(n-1), where n is the total number of points (inlcuding boundary
 %points)
@@ -77,6 +77,11 @@ for i=0:dt:t_end
     u(n,1) = 1;
     
 end
+
+plot(x,u);
+title(sprintf('Godunov''s method (a numerical conservation law) used to solve Burger''s equation,\nSolution shown at t=2'));
+xlabel('x');
+ylabel('u');
 
 end
 
