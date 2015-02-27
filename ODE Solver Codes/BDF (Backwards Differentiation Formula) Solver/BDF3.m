@@ -20,7 +20,7 @@ function [ y , tend] = BDF3(h, const2 )
 %       Where y(1,i) is the concentration of chemical species 1 at time i*h
 %   tend: the last time step that the solution was calculated
 
-% rate constant 1 = 1
+% rate constant_1 = 1
 const1 = 1;
 % initial conditions y1(0)=y2(0)=y3(0)=1
 y(1:3,1) = 1;
