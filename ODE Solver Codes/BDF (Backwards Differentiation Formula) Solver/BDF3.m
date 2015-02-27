@@ -68,7 +68,7 @@ title(str);
 str2 = sprintf('BDF3_%g', const2);
 legend('species 1','species 2','species 3', 0);
 h = figure(1);
-saveas(h,str2,'jpg');
+%saveas(h,str2,'jpg');
 
 end
 
