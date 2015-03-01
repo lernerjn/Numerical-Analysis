@@ -1,4 +1,6 @@
 # Numerical-Analysis
 These are some examples of code written for various courses and projects.
 
-Note that the cublic spline and all the ODE and PDE solvers automatically plot the solutions.
+The numerical quadrature files require an integrand, endpoints and a number of points.
+
+All other files are for specific equations and require only simple inputs, such as the time step, number of points and/or the final time.
