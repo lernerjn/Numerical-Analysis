@@ -1,9 +1,10 @@
 function [x, u] = Godunov( dtInv )
 %Author: Jeremy Lerner, Stony Brook University
 % Godunov's method for numerical conservation laws to plot the solution to 
-% Burger's equation where u_t + u*u_x = 0 , t>0 at t=2, with initial condition
+% Burger's equation where u_t + u*u_x = 0 , t>0 at t=2, with the 
+% discontinuous initial condition:
 %           { -1   , x < 1
-% u_(x,0)=  {
+% u(x,0)=   {
 %           { 1    , x > 1
 %
 % We will use the numerical conservation method: 

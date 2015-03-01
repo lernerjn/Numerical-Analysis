@@ -1,5 +1,6 @@
 function [est, soln, error] = Lax_Friedrich( N, finalT ) 
-%Lax_Friedrich solves the partial differential equation v_t + a*u_x = 0 ,
+% The Lax-Friedrich explicit PDE scheme to solve the
+% partial differential equation v_t + a*u_x = 0 ,
 % with the boundary conditions v(x,0) = (sin(pi(x-1)))^2 for 1<=x<=2 and 0
 % otherwise and a = 1. Note that the boundary conditions are assumed to be
 % periodic for the true and numerical solution. The program uses the 

@@ -1,7 +1,7 @@
 function [ u, error , soln] = IIM( N )
 %Author: Jeremy Lerner, Stony Brook University
 %Immersed Interface Method for uxx = f(x), u(-1)=-1/e 
-% This uses Leveque's Immersed Interface Method to solve the following
+% Randall Leveque's Immersed Interface Method to solve the following
 % elliptic problem:
 % u_{xx}=f(x)
 %  , u(-1)=\frac{-1}{e}

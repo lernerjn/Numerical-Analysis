@@ -1,10 +1,10 @@
-function [est, soln, error] = Crank_Nicholson( N, finalT )
-%Author: Jeremy Lerner, Stony Brook University
-%Crank_Nicholson solves the partial differential equation v_t + a*u_x = 0 ,
+function [est, soln,error] = Lax_Wendroff( N, finalT )
+% The Lax-Wendroff explicit PDE scheme to solve the 
+% partial differential equation v_t + a*u_x = 0 ,
 % with the boundary conditions v(x,0) = (sin(pi(x-1)))^2 for 1<=x<=2 and 0
 % otherwise and a = 1. Note that the boundary conditions are assumed to be
 % periodic for the true and numerical solution. The program uses the 
-% implicit Crank-Nicholson scheme for numerically estimating solutions to PDEs
+% explicit Lax-Wendroff scheme for numerically estimating solutions to PDEs
 % Input:
 %   N: N is the number of intervals in the mesh, meaning that N+1 
 %   is the number of points in the mesh.
@@ -17,10 +17,12 @@ function [est, soln, error] = Crank_Nicholson( N, finalT )
 %   is the 2-norm of the error and error(3) is the infinity norm of the
 %   error. Where the error is abs(est - sol).
 
-
-%Setting up the analytic solution
+%finalT = 4;
 deltaXSoln = 0.0001;
 N1 = 6 / deltaXSoln;
+
+
+%Setting up the analytic solution
 
 soln = zeros(N1+1, 1);
 g = @(x) (sin(pi*(x-finalT-1))).^2;
@@ -32,10 +34,10 @@ for k = 1:N1+1
     end
 end
 
-
-%The same analytic solution but the same mesh as the numerical solution
 deltaX = 6.0/N;
 a = 1;
+
+%The same analytic solution but the same mesh as the numerical solution
 
 solnSmaller = zeros(N+1,1);
 for k = 1:N+1
@@ -45,7 +47,6 @@ for k = 1:N+1
         continue;
     end
 end
-
 
 %Set deltaT based on the number of mesh points
 if (nargin == 3)
@@ -66,12 +67,12 @@ else
 end
 
 
-
 % u(space, time) = u(x,t)
 u = zeros(N+1, 1);
 u_new = zeros(N+1,1);
 f = @(x) (sin(pi*(x-1)))^2;
 % set the initial and boundary conditions in the numerical estimate
+
 for k = 1:N+1
     if ( k*deltaX >= 1 && k*deltaX <= 2)
         u(k,1) = f(k*deltaX);
@@ -82,33 +83,23 @@ end
 
 timeSteps = finalT / deltaT;
 
-if ( timeSteps == 0)
-    timeSteps = 1;
-end
-
-r = (1/4) * (a * deltaT)/(deltaX);
 %Iterate over time
-for i = 1:timeSteps
+for i = 1:timeSteps 
 
-    %The linear system to solve is Ax=Cu=b, where x = u_new
-    C = diag(ones(N+1,1),0) + diag(-r*ones(N,1),1) + diag(r*ones(N,1),-1);
-    %periodic boundary conditions
-    C(1,N+1) = r;
-    C(N+1,1) = -r;
-
-    A = diag(ones(N+1,1),0) + diag(r*ones(N,1),1) + diag(-r*ones(N,1),-1);
-    %periodic boundary conditions
-    A(1,N+1) = -r;
-    A(N+1,1) = r;
-    b = C * u;
+    %Use periodic boundary conditions to deal with the boundaries
+    u_new(1,1) = u(1,1)-(a*deltaT/(2*deltaX))*(u(1+1,1)-u(N,1)) + (((a^2)*(deltaT^2))/(2*deltaX^2))*(u(1+1,1)-2*u(1,1)+u(N,1));
+    u_new(N+1,1) = u(N,1)-(a*deltaT/(2*deltaX))*(u(1,1)-u(N-1,1)) + (((a^2)*(deltaT^2))/(2*deltaX^2))*(u(1,1)-2*u(N,1)+u(N+1-1,1));
     
-    u_new = gmres(A,b);
+    %Iterate over space, determine each value based on values from the
+    %previous time step
+    for k = 2:N
+        u_new(k,1) = u(k,1)-(a*deltaT/(2*deltaX))*(u(k+1,1)-u(k-1,1)) + (((a^2)*(deltaT^2))/(2*deltaX^2))*(u(k+1,1)-2*u(k,1)+u(k-1,1));
+    end
     u = u_new;
-    
 end
 
 %output the values for u at the desired finalT
-est = u_new;
+est = u;
 %error
 error(1) = norm( est - solnSmaller,1);
 error(2) = norm( est - solnSmaller,2);
@@ -119,7 +110,7 @@ plot((0:deltaX:6), est, '+b')
 hold on
 plot((0:deltaXSoln:6), soln, 'r')
 
-str = sprintf('Plot of the True and Numerical Solution \n using Crank Nicholson Scheme for N=%f',N);
+str = sprintf('Plot of the True and Numerical Solution \n using Lax Wendroff Scheme for N=%f',N);
 title(str);
 legend('Numerically Calculated Solution', 'True Solution');
 xlabel('x');

@@ -1,6 +1,6 @@
 function [ soln ,x ] = Collocation( n )
 %Author: Jeremy Lerner, Stony Brook University
-%Collocation method to solve the ODE 
+%Collocation method (polynomial estimate) to solve the ODE 
 %u''=-(1+exp(u)), 0<t<1 . u(0)=0, u(1)=1.
 %This program a polynomial of degree n-1, v, to estimate the true solution.
 %That is, v must satisfy the boundary conditions and the ODE at the
